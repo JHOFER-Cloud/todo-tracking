@@ -1,0 +1,39 @@
+# Example workflow file for consuming repositories
+# Copy this to your repo's .github/workflows/ directory and customize as needed
+
+name: Track TODOs
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  workflow_dispatch:
+    inputs:
+      MANUAL_COMMIT_REF:
+        description: "The SHA of the commit to get the diff for"
+        required: true
+      MANUAL_BASE_REF:
+        description: "By default, the commit entered above is compared to the one directly before it; to go back further, enter an earlier SHA here"
+        required: false
+
+jobs:
+  track:
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    uses: JHOFER-Cloud/todo-tracking/.github/workflows/todo-tracking-reusable.yml@main
+    with:
+      # Optional: Override default settings
+      # close_issues: true
+      # auto_assign: true
+      # insert_issue_urls: true
+      # languages: '.github/workflows/syntax.json'
+
+      # For workflow_dispatch initialization
+      manual_commit_ref: ${{ inputs.MANUAL_COMMIT_REF }}
+      manual_base_ref: ${{ inputs.MANUAL_BASE_REF }}
+    secrets:
+      TODO_APP_ID: ${{ secrets.TODO_APP_ID }}
+      TODO_APP_PRIV_KEY: ${{ secrets.TODO_APP_PRIV_KEY }}

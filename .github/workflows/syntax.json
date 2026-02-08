@@ -1,0 +1,92 @@
+[
+  {
+    "language": "fish",
+    "markers": [
+      {
+        "type": "line",
+        "pattern": "#"
+      }
+    ],
+    "extensions": [".fish"]
+  },
+  {
+    "language": "justfile",
+    "markers": [
+      {
+        "type": "line",
+        "pattern": "#"
+      }
+    ],
+    "extensions": ["justfile"]
+  },
+  {
+    "language": "conf",
+    "markers": [
+      {
+        "type": "line",
+        "pattern": "#"
+      }
+    ],
+    "extensions": [".conf"]
+  },
+  {
+    "language": "env",
+    "markers": [
+      {
+        "type": "line",
+        "pattern": "#"
+      }
+    ],
+    "extensions": [".env"]
+  },
+  {
+    "language": "gitignore",
+    "markers": [
+      {
+        "type": "line",
+        "pattern": "#"
+      }
+    ],
+    "extensions": [".gitignore"]
+  },
+  {
+    "language": "nix",
+    "markers": [
+      {
+        "type": "line",
+        "pattern": "#"
+      }
+    ],
+    "extensions": [".nix"]
+  },
+  {
+    "language": "dockerfile",
+    "markers": [
+      {
+        "type": "line",
+        "pattern": "#"
+      }
+    ],
+    "extensions": ["Dockerfile", ".dockerfile"]
+  },
+  {
+    "language": "yaml",
+    "markers": [
+      {
+        "type": "line",
+        "pattern": "#"
+      }
+    ],
+    "extensions": [".yaml", ".yml"]
+  },
+  {
+    "language": "toml",
+    "markers": [
+      {
+        "type": "line",
+        "pattern": "#"
+      }
+    ],
+    "extensions": [".toml"]
+  }
+]

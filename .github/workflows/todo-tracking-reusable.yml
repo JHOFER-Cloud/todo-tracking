@@ -1,0 +1,102 @@
+name: Track TODOs (Reusable)
+
+on:
+  workflow_call:
+    inputs:
+      runner:
+        description: "Runner label to use for the job"
+        required: false
+        type: string
+        default: "hla1-talos-dind"
+      branches:
+        description: 'Branches to track (JSON array, e.g. ["main", "dev"])'
+        required: false
+        type: string
+        default: '["main"]'
+      close_issues:
+        description: "Close issues when TODOs are removed"
+        required: false
+        type: boolean
+        default: true
+      auto_assign:
+        description: "Auto-assign issues to TODO author"
+        required: false
+        type: boolean
+        default: true
+      insert_issue_urls:
+        description: "Insert issue URLs back into code"
+        required: false
+        type: boolean
+        default: true
+      languages:
+        description: "Path to custom syntax.json file for language support"
+        required: false
+        type: string
+        default: ".github/workflows/syntax.json"
+      manual_commit_ref:
+        description: "Manual commit SHA (for workflow_dispatch)"
+        required: false
+        type: string
+        default: ""
+      manual_base_ref:
+        description: "Manual base SHA (for workflow_dispatch)"
+        required: false
+        type: string
+        default: ""
+    secrets:
+      TODO_APP_ID:
+        required: true
+      TODO_APP_PRIV_KEY:
+        required: true
+
+jobs:
+  track-todos:
+    runs-on: ${{ inputs.runner }}
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Generate GitHub App Token
+        id: generate-token
+        uses: actions/create-github-app-token@v2.2.1
+        with:
+          app-id: ${{ secrets.TODO_APP_ID }}
+          private-key: ${{ secrets.TODO_APP_PRIV_KEY }}
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: TODO to Issue
+        uses: alstr/todo-to-issue-action@v5.1.14
+        env:
+          MANUAL_COMMIT_REF: ${{ inputs.manual_commit_ref }}
+          MANUAL_BASE_REF: ${{ inputs.manual_base_ref }}
+        with:
+          TOKEN: ${{ steps.generate-token.outputs.token }}
+          CLOSE_ISSUES: ${{ inputs.close_issues }}
+          AUTO_ASSIGN: ${{ inputs.auto_assign }}
+          LANGUAGES: ${{ inputs.languages }}
+          INSERT_ISSUE_URLS: ${{ inputs.insert_issue_urls }}
+
+      - name: Set Git user
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit and create PR
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+        run: |
+          git add -A
+          if [[ $(git status --porcelain) ]]; then
+            BRANCH_NAME="docs/todo-issue-links"
+            BASE_BRANCH="${{ github.ref_name }}"
+            git checkout -b "$BRANCH_NAME"
+            git commit -m "docs(todos): add issue links"
+            git push -f origin "$BRANCH_NAME"
+            gh pr create --fill --head "$BRANCH_NAME" --base "$BASE_BRANCH" || true
+            gh pr merge "$BRANCH_NAME" --squash --delete-branch --admin
+          else
+            echo "No changes to commit"
+          fi
