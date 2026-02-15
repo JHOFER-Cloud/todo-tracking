@@ -84,6 +84,11 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
+      - name: Setup GitHub CLI
+        uses: sersoft-gmbh/setup-gh-cli-action@v2
+        with:
+          version: stable
+
       - name: Commit and create PR
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
