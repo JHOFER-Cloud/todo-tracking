@@ -88,5 +88,15 @@
       }
     ],
     "extensions": [".toml"]
+  },
+  {
+    "language": "lua",
+    "markers": [
+      {
+        "type": "line",
+        "pattern": "--"
+      }
+    ],
+    "extensions": [".lua"]
   }
 ]
