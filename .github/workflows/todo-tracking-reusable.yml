@@ -23,6 +23,11 @@ on:
         required: false
         type: boolean
         default: true
+      escape:
+        description: "Escape all special Markdown characters"
+        required: false
+        type: boolean
+        default: false
       insert_issue_urls:
         description: "Insert issue URLs back into code"
         required: false
@@ -78,6 +83,7 @@ jobs:
           AUTO_ASSIGN: ${{ inputs.auto_assign }}
           LANGUAGES: ${{ inputs.languages }}
           INSERT_ISSUE_URLS: ${{ inputs.insert_issue_urls }}
+          ESCAPE: ${{ inputs.escape }}
 
       - name: Set Git user
         run: |
