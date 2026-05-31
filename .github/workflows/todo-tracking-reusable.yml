@@ -27,7 +27,7 @@ on:
         description: "Escape all special Markdown characters"
         required: false
         type: boolean
-        default: false
+        default: true
       insert_issue_urls:
         description: "Insert issue URLs back into code"
         required: false
