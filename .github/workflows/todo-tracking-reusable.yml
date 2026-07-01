@@ -70,7 +70,7 @@ jobs:
           private-key: ${{ secrets.TODO_APP_PRIV_KEY }}
 
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: TODO to Issue
         uses: alstr/todo-to-issue-action@v5.1.14
